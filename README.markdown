@@ -23,30 +23,29 @@ Then you can run them from the command line:
 
 ## Status
 
-	jmhobbs@katya:~/Desktop/kohana$ php5 index.php migrations
+	jmhobbs@katya:/var/www/qaargh$ php5 index.php migrations
 
 	=======================[ Kohana Migrations ]=======================
 
-							Action: Status
-
-		Current Migration: 4
-		Latest Migration: 4
+	    Current Migration: 7
+	     Latest Migration: 7
 
 	===================================================================
 
+
 ## Up
 
-	jmhobbs@katya:~/Desktop/qaargh$ php5 index.php migrations/up/3
+	jmhobbs@katya:/var/www/qaargh$ php5 index.php migrations/up/3
 
 	=======================[ Kohana Migrations ]=======================
 
-								Action: Migrate
+	   Current Migration: 0
+	    Latest Migration: 7
 
-			Current Migration: 0
-			Latest Migration: 4
+	===================================================================
 
-		Requested Migration: 3
-							Migrating: UP
+	  Requested Migration: 3
+	            Migrating: UP
 
 	===================================================================
 
@@ -54,27 +53,40 @@ Then you can run them from the command line:
 	Migrated: 002_Users_UP.sql
 	Migrated: 003_Island_UP.sql
 
+	===================================================================
 
-## Down
-
-	jmhobbs@katya:~/Desktop/qaargh$ php5 index.php migrations/down/0
-
-	=======================[ Kohana Migrations ]=======================
-
-								Action: Migrate
-
-			Current Migration: 4
-			Latest Migration: 4
-
-		Requested Migration: 0
-							Migrating: DOWN
+	    Current Migration: 3
+	     Latest Migration: 7
 
 	===================================================================
 
-	Migrated: 004_Pages_DOWN.sql
+
+## Down
+
+	jmhobbs@katya:/var/www/qaargh$ php5 index.php migrations/down/0
+
+	=======================[ Kohana Migrations ]=======================
+
+	    Current Migration: 3
+	     Latest Migration: 7
+
+	===================================================================
+
+	  Requested Migration: 0
+	            Migrating: DOWN
+
+	===================================================================
+
 	Migrated: 003_Island_DOWN.sql
 	Migrated: 002_Users_DOWN.sql
 	Migrated: 001_Auth_DOWN.sql
+
+	===================================================================
+
+	    Current Migration: 0
+	     Latest Migration: 7
+
+	===================================================================
 
 # License
 

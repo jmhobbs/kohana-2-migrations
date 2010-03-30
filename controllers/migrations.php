@@ -12,72 +12,60 @@
 		}
 		
 		public function index () {
-			$current_version = $this->migrations->get_schema_version();
-			$last_version = $this->migrations->last_schema_version();
-			echo <<<EOF
-             Action: Status
-
-  Current Migration: $current_version
-   Latest Migration: $last_version
-
-===================================================================
-
-EOF;
+			$this->_print_status();
+			echo "\n";
+			echo "===================================================================\n\n";
 		}
 		
-		public function up ( $version = null) {
+		public function up ( $version = null ) { $this->_migrate( $version ); }
+		
+		public function down ( $version = null ) { $this->_migrate( $version, true ); }
+		
+		protected function _migrate ( $version, $down = false ) {
 			if( is_null( $version ) )
 				$version = $this->migrations->last_schema_version();
 
 			$current_version = $this->migrations->get_schema_version();
 			$last_version = $this->migrations->last_schema_version();
-			echo <<<EOF
-               Action: Migrate
-
-    Current Migration: $current_version
-     Latest Migration: $last_version
-
-  Requested Migration: $version
-            Migrating: UP
-
-===================================================================
-
-
-EOF;
-			if( $version <= $current_version )
-				echo "  Nothing To Do!\n";
-			else {
-				echo implode( "\n", $this->migrations->migrate( $current_version, $version ) );
-			}
 			
-			echo "\n";
-		}
-		
-		public function down ( $version = null) {
-			if( is_null( $version ) )
-				$version = $this->migrations->last_schema_version();
-
-			$current_version = $this->migrations->get_schema_version();
-			$last_version = $this->migrations->last_schema_version();
+			$direction = ( $down ) ? 'DOWN' : 'UP';
+			
+			$this->_print_status( 'Migrate' );
+			
 			echo <<<EOF
-               Action: Migrate
 
-    Current Migration: $current_version
-     Latest Migration: $last_version
+===================================================================
 
   Requested Migration: $version
-            Migrating: DOWN
+            Migrating: $direction
 
 ===================================================================
 
 
 EOF;
-			if( $version >= $current_version )
-				echo "  Nothing To Do!\n";
-			else {
-				echo implode( "\n", $this->migrations->migrate( $current_version, $version ) );
+			
+			if( $down ) {
+				if( $version >= $current_version ) { echo "  Nothing To Do!"; }
+				else { echo implode( "\n", $this->migrations->migrate( $current_version, $version ) ); }
 			}
-			echo "\n";
+			else {
+				if( $version <= $current_version ) { echo "  Nothing To Do!"; }
+				else { echo implode( "\n", $this->migrations->migrate( $current_version, $version ) ); }
+			}
+			echo "\n\n";
+			echo "===================================================================\n\n";
+			$this->_print_status();
+			echo "\n===================================================================\n\n";
 		}
+		
+	protected function _print_status () {
+		$current_version = $this->migrations->get_schema_version();
+		$last_version = $this->migrations->last_schema_version();
+		echo <<<EOF
+    Current Migration: $current_version
+     Latest Migration: $last_version
+
+EOF;
+	}
 		
 	}
