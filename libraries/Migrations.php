@@ -119,6 +119,7 @@
 			$db = Database::instance( $this->group );
 
 			foreach( $queries as $query ) {
+				if( empty( $query ) ) { continue; }
 				$db->query( $query );
 			}
 
