@@ -71,20 +71,17 @@
 			return $actual_migrations;
 		}
 
-		public function migrate ( $from, $to ) {
-
-			$output = array();
-
+		public function migrate ( &$controller, $from, $to ) {
 			if( $from < $to ) {
 				$migrations = $this->get_up_migrations();
 				foreach( $migrations as $index => $migration )
 					if( $index > $from and $index <= $to ) {
 						try {
-							$output[] = $this->run_migration( $migration );
+							$controller->out( $this->run_migration( $migration ) );
 							$this->set_schema_version( $index );
 						}
 						catch( Exception $e ) {
-							$output[] = "Error running migration $index up: " . $e->getMessage();
+							$controller->out( "Error running migration $index UP: " . $e->getMessage() . "\n" );
 							break;
 						}
 					}
@@ -96,19 +93,17 @@
 					$index = key( $migrations );
 					if( $index <= $from and $index > $to ) {
 						try {
-							$output[] = $this->run_migration( $item );
+							$controller->out( $this->run_migration( $item ) );
 							$this->set_schema_version( $index - 1 );
 						}
 						catch( Exception $e ) {
-							$output[] = "Error running migration $index down: " . $e->getMessage();
+							$controller->out( "Error running migration $index DOWN: " . $e->getMessage() . "\n" );
 							break;
 						}
 					}
 					$item = prev( $migrations );
 				}
 			}
-			
-			return $output;
 		} // migrate
 
 		public function run_migration ( $file ) {
@@ -123,7 +118,7 @@
 				$db->query( $query );
 			}
 
-			return "Migrated: " . basename( $file );
+			return "Migrated: " . basename( $file ) . "\n";
 		}
 
 	}
